@@ -1,0 +1,13 @@
+services:
+    player-auth-database:
+        image: postgres:latest
+        container_name: player-auth-database
+        restart: unless-stopped
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_DB: database
+            POSTGRES_USER: user
+            POSTGRES_PASSWORD: password
+        volumes:
+            - /mnt/disk1/dockerfs/
