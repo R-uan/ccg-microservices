@@ -1,3 +1,5 @@
+using MongoDB.Driver;
+
 namespace CardCatalog.Interface
 {
     public interface ICardCatalogRepository
@@ -7,5 +9,6 @@ namespace CardCatalog.Interface
         Task<Card?> SaveCard(Card card);
         Task<int> SaveMultipleCards(List<Card> cards);
         Task<List<Card>> FindCards(List<Guid> cardIds);
+        Task<List<Card>> FindCards(FilterDefinition<Card> filter);
     }
 }

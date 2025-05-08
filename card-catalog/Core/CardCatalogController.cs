@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace CardCatalog.Core
 {
     [ApiController]
-    [Route("api/cards")]
+    [Route("api")]
     public class CatalogController(ICardCatalogRepository cardCatalogRepository, ICardCatalogService cardCatalogService) : ControllerBase
     {
-        [HttpPost]
+        [HttpPost("cards")]
         public async Task<IActionResult> PostMany(PostManyCardsRequest request)
         {
             try
@@ -23,7 +23,7 @@ namespace CardCatalog.Core
             }
         }
 
-        [HttpGet("catalog")]
+        [HttpGet("cards/catalog")]
         public async Task<IActionResult> GetCatalog()
         {
             try
@@ -38,7 +38,7 @@ namespace CardCatalog.Core
             }
         }
 
-        [HttpGet("{guid}")]
+        [HttpGet("card/{guid}")]
         public async Task<IActionResult> GetOneCard(string guid)
         {
             try
@@ -58,7 +58,7 @@ namespace CardCatalog.Core
             }
         }
 
-        [HttpPost("select")]
+        [HttpPost("cards/selected")]
         public async Task<IActionResult> GetCards([FromBody] SelectedCardsRequest request)
         {
             try
@@ -72,5 +72,21 @@ namespace CardCatalog.Core
                 return StatusCode(500, "Unexpected Error has occured");
             }
         }
+
+        [HttpGet("cards/search")]
+        public async Task<IActionResult> QueryCards([FromQuery] SearchQuery parameters)
+        {
+            try
+            {
+                var cards = await cardCatalogService.QueryCards(parameters);
+                return Ok(cards);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500, "Unexpected error occurred");
+            }
+        }
+        
     }
 }

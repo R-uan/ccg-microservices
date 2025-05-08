@@ -24,6 +24,12 @@ namespace CardCatalog.Core
             return await result.ToListAsync();
         }
 
+        public async Task<List<Card>> FindCards(FilterDefinition<Card> filter)
+        {
+            var result = await cardCollection.FindAsync(filter);
+            return await result.ToListAsync();
+        }
+        
         public async Task<Card?> SaveCard(Card card)
         {
             await cardCollection.InsertOneAsync(card);
