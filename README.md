@@ -1,7 +1,7 @@
 # CCG Microservices
 Welcome to the microservices dump of my project. If you're looking for the exciting stuff like the game server, game client, Synapse Net, or the match-making server—yeah, those live in their own fancy little repos. What you'll find here is mostly the CRUD workhorses doing their boring but necessary jobs. Don't expect fireworks, just solid backend grunt work.
 
-## Player Auth Server
+## [Player Auth Server](https://github.com/R-uan/ccg-microservices/blob/main/auth-server/README.md)
 As the name suggests, this microservice handles player authentication—creating accounts and logging players in using email and password. It uses JWTs for auth (because they’re dead simple), and those tokens are passed around like candy across the rest of the system. The Auth Server is completely independent; it doesn’t know or care about the other services, even if they constantly come knocking. It’s written in C# (.NET) and backed by PostgreSQL. (This also contains a player's owned cards table)
 
 > Tags: C#, .NET, Postgres, Authentication, JWT, Entity Framework
