@@ -20,11 +20,10 @@ namespace PlayerAuthServer.Services
             return createdPlayer;
         }
 
-        public async Task<PartialPlayerProfile?> GetPartialPlayerProfileAsync(Guid playerId)
+        public async Task<AuthenticatedPlayer?> ConfirmPlayerIdentity(Guid playerId)
         {
             var player = await playerRepository.FindPlayer(playerId);
-            if (player == null) return null;
-            return PartialPlayerProfile.Create(player);
+            return player == null ? null : AuthenticatedPlayer.Create(player);
         }
     }
 }

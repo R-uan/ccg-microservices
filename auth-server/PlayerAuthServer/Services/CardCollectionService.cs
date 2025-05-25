@@ -14,7 +14,7 @@ namespace PlayerAuthServer.Services
 
             request.CardIds.ForEach(guid => { if (Guid.TryParse(guid, out var valid)) validGuids.Add(valid); else invalidGuids.Add(guid); });
             var ownedCards = await cardRepository.FindOwnedCards(validGuids, playerId);
-            var notFound = validGuids.Where(valid => !ownedCards.Any(x => x.CardId == valid)).ToList();
+            var notFound = validGuids.Where(valid => ownedCards.All(x => x.CardId != valid)).ToList();
             var response = new CheckCollectionResponse(ownedCards, notFound, invalidGuids);
             return response;
         }
@@ -22,8 +22,8 @@ namespace PlayerAuthServer.Services
         public async Task<CardCollection> CollectCard(CollectCardRequest request, Guid playerId)
         {
             var newAcquisition = new CardCollection(request.CardId, request.Amount, playerId);
-            var saveAcquisiton = await cardRepository.SaveEntity(newAcquisition);
-            return saveAcquisiton;
+            var saveAcquisition = await cardRepository.SaveEntity(newAcquisition);
+            return saveAcquisition;
         }
 
         public async Task<List<CardCollection>?> FindPlayerCollection(Guid playerId)

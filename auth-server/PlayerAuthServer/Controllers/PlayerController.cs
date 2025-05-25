@@ -9,8 +9,15 @@ namespace PlayerAuthServer.Controllers
     [Route("api/player")]
     public class PlayerController(IPlayerService playerService, IPlayerRepository playerRepository) : ControllerBase
     {
+        [HttpGet("{playerId}")]
+        public async Task<IActionResult> GetPartialPlayerProfileProfile(Guid playerId)
+        {
+            var player = await playerRepository.FindPlayer(playerId);
+            return player != null ? Ok(PartialPlayerProfile.Create(player)) : NotFound();
+        }
+
         [Authorize]
-        [HttpGet("profile")]
+        [HttpGet("account")]
         public async Task<IActionResult> GetPlayerProfile()
         {
             var idClaim = User.FindFirst("Id")?.Value;
@@ -21,13 +28,6 @@ namespace PlayerAuthServer.Controllers
             }
 
             return Unauthorized();
-        }
-
-        [HttpGet("partial/{playerId}")]
-        public async Task<IActionResult> GetPartialPlayerProfileProfile(Guid playerId)
-        {
-            var player = await playerService.GetPartialPlayerProfileAsync(playerId);
-            return player != null ? Ok(player) : NotFound();
         }
     }
 }

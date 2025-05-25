@@ -57,6 +57,7 @@ namespace PlayerAuthServer
 
 
             var app = builder.Build();
+            app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();

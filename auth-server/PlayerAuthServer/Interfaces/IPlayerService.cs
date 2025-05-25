@@ -15,6 +15,5 @@ namespace PlayerAuthServer.Interfaces
         /// <exception cref="DuplicateEmailException">Thrown when the email is already registered.</exception>
         /// <exception cref="DuplicateUsernameException">Thrown when the username is already taken.</exception>
         Task<Player> CreatePlayerWithDefaults(NewPlayer newPlayer);
-        Task<PartialPlayerProfile?> GetPartialPlayerProfileAsync(Guid playerId);
     }
 }

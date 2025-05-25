@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlayerAuthServer.Utilities;
 using PlayerAuthServer.Interfaces;
 using PlayerAuthServer.Exceptions;
+using PlayerAuthServer.Models;
 using PlayerAuthServer.Models.Responses;
 using PlayerAuthServer.Utilities.Exceptions;
 using PlayerAuthServer.Models.Requests;
@@ -10,14 +12,28 @@ namespace PlayerAuthServer.Controllers
 {
     [ApiController]
     [Route("api/auth")]
-    public class AuthController(IAuthService service) : ControllerBase
+    public class AuthController(IAuthService authService, IPlayerRepository playerRepository) : ControllerBase
     {
+        [Authorize]
+        [HttpGet("/")]
+        public async Task<IActionResult> AuthenticatePlayerToken()
+        {
+            var playerIdClaim = User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+            if (Guid.TryParse(playerIdClaim, out var playerId))
+            {
+                var player = await playerRepository.FindPlayer(playerId);
+                return player != null ? Ok(AuthenticatedPlayer.Create(player)) : NotFound();
+            } 
+            
+            return Unauthorized();
+        }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest login)
         {
             try
             {
-                string token = await service.AuthenticatePlayer(login);
+                string token = await authService.AuthenticatePlayer(login);
                 var response = new LoginResponse(token);
                 return Ok(response);
             }
@@ -45,7 +61,7 @@ namespace PlayerAuthServer.Controllers
         {
             try
             {
-                var registeredPlayer = await service.RegisterNewPlayer(request);
+                var registeredPlayer = await authService.RegisterNewPlayer(request);
                 var response = new RegisterResponse(registeredPlayer);
                 return Ok(response);
             }
