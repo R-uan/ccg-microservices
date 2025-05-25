@@ -11,6 +11,7 @@ namespace PlayerAuthServer.Models
         public int Amount { get; set; } = amount;
 
         [Key]
+        [JsonIgnore]
         public Guid PlayerId { get; set; } = playerId;
 
         [JsonIgnore]

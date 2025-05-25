@@ -15,7 +15,7 @@ namespace PlayerAuthServer.Controllers
     public class AuthController(IAuthService authService, IPlayerRepository playerRepository) : ControllerBase
     {
         [Authorize]
-        [HttpGet("/")]
+        [HttpGet("/verify")]
         public async Task<IActionResult> AuthenticatePlayerToken()
         {
             var playerIdClaim = User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;

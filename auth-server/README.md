@@ -10,6 +10,7 @@ The Player Auth Server is a micro-service responsible for the storage and authen
 ### Some specifications
 The server was built up from .NET Web API. The database used is PostgreSQL and the ORM is Entity Framework. The authentication token is in JWT format while the password hashing uses BCrypt.
 ## Endpoints
+
 ### Authentication
 
 #### 🔓 Player Login
@@ -24,9 +25,9 @@ The server was built up from .NET Web API. The database used is PostgreSQL and t
     }
 
     Unauthorized {}
-    
 
 #### 🔓 Player Registration
+
     PUBLIC POST /api/auth/register {
         "email": string,
         "username": string,
@@ -44,13 +45,29 @@ The server was built up from .NET Web API. The database used is PostgreSQL and t
 
     BadRequest { }
 
-### Player
+#### 🔒 Player Identify Verification
+    
+    GUARDED GET api/player/verify { }
+
+##### Responses {
+    Ok {
+        "playerId": string,
+        "username": string,
+        "isBanned": boolean
+    }
+
+    Unauthorized { }
+
+    NotFound { }
+}
+
+### Player[AuthController.cs](PlayerAuthServer/Controllers/AuthController.cs)
 
 #### 🔒 Update information (TODO)
     GUARDED PATCH /api/player { }
 
 #### 🔒 Player Profile Information
-    GUARDED GET /api/player/profile { }
+    GUARDED GET /api/player/account { }
 
 ##### Responses
     Ok {
@@ -69,7 +86,7 @@ The server was built up from .NET Web API. The database used is PostgreSQL and t
     Unauthorized { }
 
 #### 🔓 Partial Player Profile Information
-    PUBLIC GET /api/player/partial/{playerId}` { }
+    PUBLIC GET /api/player/{playerId}` { }
 
 ##### Responses
     Ok {
@@ -86,7 +103,7 @@ The server was built up from .NET Web API. The database used is PostgreSQL and t
 ### Card Collection
 
 #### 🔒 Check Player Collection 
-    GUARDED GET /api/player/collection/check { 
+    GUARDED GET /api/player/collection/verify { 
         cardIds: string[]
     }
 
@@ -97,6 +114,20 @@ The server was built up from .NET Web API. The database used is PostgreSQL and t
         invalidCards: string[]
     }
     
+    Unauthorized { }
+
+#### 🔒 Get Card Collection
+    GUARDED GET api/player/collection { }
+
+##### Responses
+    Ok {
+        "amount": int,
+        "ownedCards": {
+            "cardId": string,
+            "amount": int
+        }[]
+    }
+
     Unauthorized { }
 
 #### 🔒 Add new card to Player's collection
