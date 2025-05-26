@@ -46,8 +46,8 @@ The server was built up from .NET Web API. The database used is PostgreSQL and t
     BadRequest { }
 
 #### 🔒 Player Identify Verification
-    
-    GUARDED GET api/player/verify { }
+    c
+    GUARDED GET api/auth/verify { }
 
 ##### Responses {
     Ok {
