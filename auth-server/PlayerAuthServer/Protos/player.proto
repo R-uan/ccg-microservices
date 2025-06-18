@@ -1,0 +1,20 @@
+syntax = "proto3";
+package PlayerAuthServer;
+option  csharp_namespace = "PlayerAuthServer.GrpcServices";
+
+message AuthenticatedPlayer {
+  bool authenticated = 1;
+  string playerId = 2;
+  string username = 3;
+  bool isBanned = 4;
+}
+
+message AuthenticationRequest {
+  string playerId = 1;
+  string playerToken = 2;
+}
+
+service PlayerGrpcService {
+  rpc AuthenticatePlayer (AuthenticationRequest) returns (AuthenticatedPlayer);
+}
+

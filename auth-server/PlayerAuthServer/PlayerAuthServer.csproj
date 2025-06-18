@@ -29,4 +29,7 @@
   <ItemGroup>
     <Using Include="BCrypt.Net.BCrypt" Alias="Bcrypt" />
   </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="Protos\player.proto" GrpcServices="Server" />
+  </ItemGroup>
 </Project>

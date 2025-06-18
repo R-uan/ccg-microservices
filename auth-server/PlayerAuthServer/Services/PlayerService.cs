@@ -20,7 +20,7 @@ namespace PlayerAuthServer.Services
             return createdPlayer;
         }
 
-        public async Task<AuthenticatedPlayer?> ConfirmPlayerIdentity(Guid playerId)
+        public async Task<AuthenticatedPlayer?> AuthenticatePlayerIdentity(Guid playerId)
         {
             var player = await playerRepository.FindPlayer(playerId);
             return player == null ? null : AuthenticatedPlayer.Create(player);
